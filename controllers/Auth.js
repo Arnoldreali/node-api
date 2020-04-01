@@ -23,6 +23,7 @@ function loginUser(req, res){
         let token = jwt.sign({id: user.id}, process.env.JWT_SECRET,{expiresIn: 864000})
         res.status(200).send({auth:true, token: token, username: user.toObject().username})
         
+        
 
     })
     .catch((err)=>{
