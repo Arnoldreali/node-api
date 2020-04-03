@@ -58,8 +58,6 @@ function getGemsPagination(req, res){
             res.status(500).send({message: `Error in request ${err}`})
         })
     })
-
-
 }
 
 function getGem(req, res){
@@ -112,13 +110,10 @@ function updateGem(req, res){
     let conceptID =req.body._id
     let update = req.body.Gem
 
-   
-    
    GemsSub.findByIdAndUpdate(conceptID, update, (err, concept)=>{
      if(err)return res.status(500).send ({message: `Problem with the searching request ${err}`})
         res.status(200).send ({message: `Update Successfull`, Gem: concept})
     })
-    
     
 }
 function updateGemWithImages(_id, img) {
@@ -127,30 +122,30 @@ function updateGemWithImages(_id, img) {
 
     GemsSub.findByIdAndUpdate(conceptID,
         { "$push": { "images": update } },
-        { "new": true, "upsert": true },
+        { "new": false, "upsert": false },
         (err, conceptUpdate) => {
             if (err) return res.status(500).send({ message: `Error in the request ${err}` })
             console.log("Gem update", conceptUpdate)
         })
-
 
 }
 
 function deleteGem(req,res){
 
     const conceptID =req.body._id
+    const img =req.body.
 
     GemsSub.remove({_id: conceptID},(err,concept)=>{
 
         if(err)return res.status(500).send ({message: `Problem with the searching ${err}`})
         res.status(200).send ({message: `Delete Completed`, Gem: concept})
-
     })
 }
 
 function uploadPhotos(req, res) {
 
     const path = req.files.file.path
+    const gemID =req.body._id
     console.log(typeof path)
     const uniqueFilename = Random.id()
     fs.readFile(path, function (err, data) {
@@ -158,18 +153,19 @@ function uploadPhotos(req, res) {
         cloudinary.uploader.upload(path, { public_id: `gemsImages/${uniqueFilename}`, 
         tags: `gemsImages`},
         (err, result)=> {
+
+            let routeImg =result.url
+            let arrayRoute = routeImg.split("/")
+            let finalUrl = arrayRoute[6]+"/"+arrayRoute[7]
+            +"/"+arrayRoute[8]
                 console.log(result);
             if(err) return res.status(500).send(err)
             fs.unlinkSync(path)
-            updateGemWithImages()
-            res.status(200).send({message: "upload image sucess",
-            imageData: result})
+            updateGemWithImages(gemID, finalUrl)
+            res.status(200).send({message: "upload image sucess", imageData: result})
         
         })
     })
-
-
-
 }
 function formatDateName(now) {
     let year = now.getFullYear()
