@@ -3,15 +3,13 @@ module.exports = {
     logoutUser,
     getCurrentUser,
     signInUser
-}
-const User = require('../models/User')
-
-const jwt = require('jsonwebtoken')
-const bcrypt =require('bcryptjs')
-const sha256 = require('sha256')
-const Ramdon = require('meteor-random')
-
-const verifyToken = require('../middleware/VerifyToken')
+}//*exporta los modulos que se crean en la parte de abajo para que puedan ser utilizados por otros archivos
+const User = require('../models/User')//* constante para mandar a llamar al modelo de usuarios
+const jwt = require('jsonwebtoken')//* constante para mandar a llamar a la herramienta par crear tokens
+const bcrypt =require('bcryptjs')//* constante que manda a llamar a la herramienta bcryptjs
+const sha256 = require('sha256')//* constante que manda a llamar a la herramienta sha256
+const Ramdon = require('meteor-random')//* constante que manda a llamar la herramienta meteor-random
+const verifyToken = require('../middleware/VerifyToken')//*constante que manda a llamar la ruta de el token de verificacion
 
 function loginUser(req, res){
     User.findOne({username: req.body.username}).then((user)=>{
@@ -30,11 +28,11 @@ function loginUser(req, res){
         console.log("Error on catch", err)
         res.status(500).send({message: 'Error on USER', error: err})
     })
-}
+}//*funcion que hace el inicio de sesion de un usuario ademas manda los errores que puede tener
 
 function logoutUser(req, res){
     res.status(200).send({auth:false, token:null});
-}
+}//*funcion que cierra la sesion 
 
 function getCurrentUser(req, res){
     let token = req.headers['x-acces-token']
@@ -49,7 +47,7 @@ function getCurrentUser(req, res){
     })
     .catch((err)=> res.status(500).send({err}))
 
-}
+}//* funcion que toma al usario que tiene la sesion en el momento 
 
 function signInUser(req, res){
     const user = new User({
@@ -72,4 +70,4 @@ function signInUser(req, res){
             message: 'User Created'})
         
     })
-}
+}//*funcion que crea a nuevos usuarios

@@ -1,9 +1,8 @@
 'use strict'
-const mongoose = require('mongoose')
-const app = require('./app')
-const port = process.env.PORT || 3000
-const uat = 'mongodb+srv://Arnoldoreali:Arnoldreali@cardb-lxfyw.mongodb.net/test?retryWrites=true&w=majority'
-const local = "mongodb://localhost:27017/database"
+const mongoose = require('mongoose')//*constante que utiliza la herramienta mongoose
+const app = require('./app')//*manda a hablar a la ruta de app
+const port = process.env.PORT || 3000//*establece el puerto a utilizarse
+const local = "mongodb://localhost:27017/database"//*establece la ruta local de la base de datos
 
 mongoose.connect(local, (err, res)=>{
     if (err){
@@ -13,4 +12,4 @@ mongoose.connect(local, (err, res)=>{
     app.listen(port, ()=>{
         console.log(`API Rest running at http://localhost:${port}`)
     })
-})
+})//*conector a la base de datos

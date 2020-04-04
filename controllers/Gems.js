@@ -6,20 +6,20 @@ module.exports = {
     updateGem,
     deleteGem,
     uploadPhotos
-}
+}//*exporta los modulos que se crean en la parte de abajo para que puedan ser utilizados por otros archivos
 
-const GemsSub = require('../models/gems')
-const mongoose = require('mongoose')
-const meteorID = require('meteor-mongo-id')
-const Random = require('meteor-random')
-const cloudinary = require('cloudinary').v2
-const fs = require('fs')
+const GemsSub = require('../models/gems')//*constante que manda a llamar al modelo de gemas
+const mongoose = require('mongoose')//*constante que manda a llamar a la herramienta de mongoose
+const meteorID = require('meteor-mongo-id')//*constante que manda a llamar a la herramienta de meteor-mongo-id
+const Random = require('meteor-random')//*constante que manda a llamar a la herramienta de meteaor-random
+const cloudinary = require('cloudinary').v2//*constante que manda a llamar a la herramienta de cloudinary
+const fs = require('fs')//*constante que manda a llamar a la herramienta de fs
 
 cloudinary.config({
     cloud_name:'arnoldreali',
     api_key:'423672529145183',
     api_secret:'7b3f5cspOjMsqopPuuM7R5O8slk'
-})
+})//*configuracion para la configuracion de cloudinary
 
 function getGems(req, res){
     GemsSub.find({},(err, concepts)=>{
@@ -28,13 +28,12 @@ function getGems(req, res){
 
         res.status(200).send({gems: concepts})
        })
-}
+}//funcion para agarrar las gemas ademas de contar con las respuestas de internet (500, 400, 200)
 
 function getGemsPagination(req, res){
     let perPage = parseInt(req.body.perPage)
     let page = parseInt(req.body.page)
     let GemsConceptsRes = null
-    
     let searchData =req.query.search
 
     GemsSub.find(searchData).skip((page-1)*perPage)
@@ -47,7 +46,6 @@ function getGemsPagination(req, res){
         GemsConceptsRes = concepts
         console.info("Result", concepts)
         return GemsSub.count()
-        
     })
     .then((total)=>{
         res.set('X-total', total)
@@ -58,7 +56,7 @@ function getGemsPagination(req, res){
             res.status(500).send({message: `Error in request ${err}`})
         })
     })
-}
+}//funcion para agarrar las gemas por paginas ademas de contar con las respuestas de internet (500, 400, 200)
 
 function getGem(req, res){
     let  conceptID = req.body._id
@@ -68,7 +66,7 @@ function getGem(req, res){
 
         res.status(200).send({Gem: concept})
        })
-}
+}//funcion para agarrar la gema ademas de contar con las respuestas de internet (500, 400, 200)
 
 function createGem(req, res) {
     let gem = req.body
@@ -104,7 +102,7 @@ function createGem(req, res) {
 
         res.status(200).send({ gem: gemStored })
     })
-}
+}//funcion para crear gemas en base al modelo de gemas, ademas de contar con las respuestas de internet (500, 400, 200)
 
 function updateGem(req, res){
     let conceptID =req.body._id
@@ -115,7 +113,7 @@ function updateGem(req, res){
         res.status(200).send ({message: `Update Successfull`, Gem: concept})
     })
     
-}
+}//funcion para actualizar una gema, ademas de contar con las respuestas de internet (500, 400, 200)
 function updateGemWithImages(_id, img) {
     let conceptID = _id
     let update = img
@@ -128,7 +126,7 @@ function updateGemWithImages(_id, img) {
             console.log("Gem update", conceptUpdate)
         })
 
-}
+}//funcion para actualizar una gema con imagen, ademas de contar con las respuestas de internet (500, 400, 200)
 
 function deleteGem(req,res){
 
@@ -140,7 +138,7 @@ function deleteGem(req,res){
         if(err)return res.status(500).send ({message: `Problem with the searching ${err}`})
         res.status(200).send ({message: `Delete Completed`, Gem: concept})
     })
-}
+}//* funcion para eliminar una gema, ademas de contar con las respuestas de internet (500, 400, 200)
 
 function uploadPhotos(req, res) {
 
@@ -166,7 +164,7 @@ function uploadPhotos(req, res) {
         
         })
     })
-}
+}//funcion para actualizar alguna foto, ademas de contar con las respuestas de internet (500, 400, 200)
 function formatDateName(now) {
     let year = now.getFullYear()
     let month = now.getMonth() < 9 ? `0${now.getMonth() + 1}` : now.getMonth() + 1
@@ -176,4 +174,4 @@ function formatDateName(now) {
     let seconds = now.getSeconds() < 10 ? `0${now.getSeconds()}` : now.getSeconds()
 
     return `${year}-${month}-${day}_${hours}:${minutes}:${seconds}`
-} 
+} //*funcion para crear una fecha bien establecida
